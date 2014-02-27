@@ -124,9 +124,19 @@ void matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b
 /* the fast version of matmul written by the team */
 void team_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2)
 {
-  // this call here is just dummy code
-  // insert your own code instead
-  matmul(A, B, C, a_dim1, a_dim2, b_dim2);
+  int i, j, k;
+#pragma omp parallel for private(i, j, k)
+  for ( i = 0; i < a_dim1; i++ ) {
+//#pragma omp parallel for private(j, k)
+    for( j = 0; j < b_dim2; j++ ) {
+      double sum = 0.0;
+//#pragma omp parallel for
+      for ( k = 0; k < a_dim2; k++ ) {
+        sum += A[i][k] * B[k][j];
+      }
+      C[i][j] = sum;
+    }
+  }
 }
 
 int main(int argc, char ** argv)
@@ -180,7 +190,7 @@ int main(int argc, char ** argv)
     (stop_time.tv_usec - start_time.tv_usec);
   printf("Matmul time: %lld microseconds\n", mul_time);
 
-  DEBUGGING(write_out(C, a_dim1, b_dim2));
+  //write_out(C, a_dim1, b_dim2);
 
   /* now check that the team's matmul routine gives the same answer
      as the known working version */
