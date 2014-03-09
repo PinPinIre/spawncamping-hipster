@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <assert.h>
 #include <omp.h>
+#include <math.h>
 
 /* the following two definitions of DEBUGGING control whether or not
    debugging information is written out. To put the program into
@@ -94,7 +95,7 @@ void check_result(double ** result, double ** control, int dim1, int dim2)
 
   for ( i = 0; i < dim1; i++ ) {
     for ( j = 0; j < dim2; j++ ) {
-      double diff = abs(control[i][j] - result[i][j]);
+      double diff = fabs(control[i][j] - result[i][j]);
       sum_abs_diff = sum_abs_diff + diff;
     }
   }
