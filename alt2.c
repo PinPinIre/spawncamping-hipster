@@ -103,7 +103,7 @@ void check_result(double ** result, double ** control, int dim1, int dim2)
 {
   int i, j;
   double sum_abs_diff = 0.0;
-const double EPSILON = 0.0625;
+  const double EPSILON = 0.0625;
 
   for ( i = 0; i < dim1; i++ ) {
     for ( j = 0; j < dim2; j++ ) {
