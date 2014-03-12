@@ -126,7 +126,7 @@ void matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b
 void team_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2)
 {
   int i, j, k;
-  
+
   #pragma omp parallel for private(i, j, k)
   for ( i = 0; i < a_dim1; i++ ) {
     double aik = A[i][0];
@@ -136,7 +136,7 @@ void team_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, 
     {
         aik = A[i][k];
         for(j = 0; j < b_dim2; j++)
-          C[i][j] += Aik * B[k][j];
+          C[i][j] += aik * B[k][j];
     }
   }
 }
