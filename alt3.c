@@ -125,14 +125,20 @@ void matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b
 /* the fast version of matmul written by the team */
 void team_matmul(double ** A, double ** B, double ** C, int a_dim1, int a_dim2, int b_dim2)
 {
+/*  Very similar to naive but the iterations have been reordered to in order to
+*   to achieve spatial and temporal locality while accessing each array.
+*/
   register int i, j, k;
   #pragma omp parallel for //private(i, j, k)
   for ( i = 0; i < a_dim1; i++ ) {
+    // As C array hasn't been initilised to 0, each row has to be initialised
     double aik = A[i][0];
     double* b0 = B[0];
     double* ci1 = C[i];
     for( j = 0; j < b_dim2; j++ )
         *(ci1 + j) = aik * *(b0 + j);
+        
+    // Continue multiplying the matrix and store in C
     for ( k = 1; k < a_dim2; k++ )
     {
         aik = A[i][k];
